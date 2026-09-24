@@ -1,5 +1,6 @@
 package fr.natsystem.batch.IDFTransports.jobs;
 
+import fr.natsystem.batch.IDFTransports.processor.ProcessorStrategy;
 import fr.natsystem.batch.IDFTransports.readers.ReaderStrategy;
 import fr.natsystem.batch.IDFTransports.writers.WriterStrategy;
 import org.springframework.batch.core.job.Job;
@@ -16,9 +17,10 @@ public class ImportStopJobConfig extends ImportJobConfig {
     public ImportStopJobConfig(
             @Qualifier("importStopReader") ReaderStrategy readerStrategy,
             @Qualifier("importStopWriter") WriterStrategy writerStrategy,
+            @Qualifier("importStopProcessor") ProcessorStrategy processorStrategy,
             JobRepository jobRepository,
             PlatformTransactionManager transactionManager) {
-        super(readerStrategy, writerStrategy, jobRepository, transactionManager);
+        super(readerStrategy, writerStrategy, processorStrategy, jobRepository, transactionManager);
     }
 
     @Bean

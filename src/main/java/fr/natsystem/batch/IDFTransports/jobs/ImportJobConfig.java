@@ -1,6 +1,7 @@
 package fr.natsystem.batch.IDFTransports.jobs;
 
 import fr.natsystem.batch.IDFTransports.models.Stop;
+import fr.natsystem.batch.IDFTransports.processor.ProcessorStrategy;
 import fr.natsystem.batch.IDFTransports.readers.ReaderStrategy;
 import fr.natsystem.batch.IDFTransports.writers.WriterStrategy;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public abstract class ImportJobConfig {
 
     private final ReaderStrategy readerStrategy;
     private final WriterStrategy writerStrategy;
+    private final ProcessorStrategy processorStrategy;
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
 
@@ -33,6 +35,7 @@ public abstract class ImportJobConfig {
                 .<Stop, Stop>chunk(CHUNK_SIZE)
                 .transactionManager(transactionManager)
                 .reader(readerStrategy.getCSVReader())
+                .processor(processorStrategy.getProcessor())
                 .writer(writerStrategy.getWriter())
                 .build();
 
