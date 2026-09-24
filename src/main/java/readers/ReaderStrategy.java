@@ -1,0 +1,8 @@
+package readers;
+
+import org.springframework.batch.infrastructure.item.file.FlatFileItemReader;
+
+public interface ReaderStrategy {
+    FlatFileItemReader readCsv(String inputFile);
+
+}
