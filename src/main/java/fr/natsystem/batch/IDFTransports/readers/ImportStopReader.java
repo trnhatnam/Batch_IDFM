@@ -1,13 +1,15 @@
-package readers;
+package fr.natsystem.batch.IDFTransports.readers;
 
-import models.Stop;
+import fr.natsystem.batch.IDFTransports.models.Stop;
 import org.springframework.batch.infrastructure.item.file.FlatFileItemReader;
 import org.springframework.batch.infrastructure.item.file.builder.FlatFileItemReaderBuilder;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
 import java.math.BigDecimal;
 import java.util.Optional;
 
+@Configuration
 public class ImportStopReader implements ReaderStrategy {
 
     @Override

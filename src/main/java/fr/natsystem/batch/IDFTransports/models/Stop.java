@@ -1,4 +1,4 @@
-package models;
+package fr.natsystem.batch.IDFTransports.models;
 
 import java.math.BigDecimal;
 
