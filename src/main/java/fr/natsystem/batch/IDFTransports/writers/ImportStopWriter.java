@@ -4,22 +4,24 @@ import fr.natsystem.batch.IDFTransports.models.Stop;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.infrastructure.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.infrastructure.item.database.builder.JdbcBatchItemWriterBuilder;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 
-@Configuration
+@Component
 @RequiredArgsConstructor
+@Qualifier("importStopWriter")
 public class ImportStopWriter implements WriterStrategy {
 
     private final DataSource ds;
 
     @Override
-    public JdbcBatchItemWriter<Stop> write(){
+    public JdbcBatchItemWriter<Stop> getWriter(){
         return new JdbcBatchItemWriterBuilder<Stop>()
                 .dataSource(ds)
                 .sql("""
-                    INSERT INTO stop (
+                    INSERT INTO stops (
                         stop_id,
                         stop_code,
                         stop_name,
@@ -54,6 +56,7 @@ public class ImportStopWriter implements WriterStrategy {
                     );
                 """
                 )
+                .beanMapped()
                 .build();
     }
 }

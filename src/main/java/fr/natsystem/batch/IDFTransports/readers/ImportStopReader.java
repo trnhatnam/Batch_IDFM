@@ -3,20 +3,43 @@ package fr.natsystem.batch.IDFTransports.readers;
 import fr.natsystem.batch.IDFTransports.models.Stop;
 import org.springframework.batch.infrastructure.item.file.FlatFileItemReader;
 import org.springframework.batch.infrastructure.item.file.builder.FlatFileItemReaderBuilder;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.Optional;
 
-@Configuration
+@Component
+@Qualifier("importStopReader")
 public class ImportStopReader implements ReaderStrategy {
 
+    private static final String STOPS_FILE = "stops.txt";
+
     @Override
-    public FlatFileItemReader<Stop> readCsv(String inputFile) {
+    public FlatFileItemReader<Stop> getCSVReader() {
         return new FlatFileItemReaderBuilder<Stop>()
-                .resource(new ClassPathResource("stop.txt"))
-                .delimited().names("stop_id,stop_code,stop_name,stop_desc,stop_lon,stop_lat,zone_id,stop_url,location_type,parent_station,stop_timezone,level_id,wheelchair_boarding,platform_code,stop_access")
+                .name("importStopReader")
+                .resource(new ClassPathResource(STOPS_FILE))
+                .delimited()
+                .delimiter(",")
+                .names(
+                        "stop_id",
+                        "stop_code",
+                        "stop_name",
+                        "stop_desc",
+                        "stop_lon",
+                        "stop_lat",
+                        "zone_id",
+                        "stop_url",
+                        "location_type",
+                        "parent_station",
+                        "stop_timezone",
+                        "level_id",
+                        "wheelchair_boarding",
+                        "platform_code",
+                        "stop_access"
+                )
                 .fieldSetMapper(fs -> new Stop(
                         fs.readString("stop_id"),
                         fs.readString("stop_code"),
