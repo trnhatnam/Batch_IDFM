@@ -3,15 +3,13 @@ package fr.natsystem.batch.IDFTransports.readers;
 import fr.natsystem.batch.IDFTransports.models.Stop;
 import org.springframework.batch.infrastructure.item.file.FlatFileItemReader;
 import org.springframework.batch.infrastructure.item.file.builder.FlatFileItemReaderBuilder;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.Optional;
 
-@Component
-@Qualifier("importStopReader")
+@Component("importStopReader")
 public class ImportStopReader implements ReaderStrategy {
 
     private static final String STOPS_FILE = "stops.txt";

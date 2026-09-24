@@ -4,14 +4,12 @@ import fr.natsystem.batch.IDFTransports.models.Stop;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.infrastructure.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.infrastructure.item.database.builder.JdbcBatchItemWriterBuilder;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 
-@Component
+@Component("importStopWriter")
 @RequiredArgsConstructor
-@Qualifier("importStopWriter")
 public class ImportStopWriter implements WriterStrategy {
 
     private final DataSource ds;
