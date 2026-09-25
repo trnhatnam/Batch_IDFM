@@ -15,3 +15,20 @@ CREATE TABLE IF NOT EXISTS stops (
     platform_code        VARCHAR(255),
     stop_access          VARCHAR(255)
 );
+
+CREATE TABLE IF NOT EXISTS stop_times (
+    trip_id VARCHAR(255),
+    arrival_time BIGINT,
+    departure_time BIGINT ,
+    start_pickup_drop_off_window VARCHAR(255),
+    end_pickup_drop_off_window VARCHAR(255),
+    stop_id VARCHAR(255),
+    stop_sequence SMALLINT,
+    pickup_type SMALLINT,
+    drop_off_type SMALLINT,
+    local_zone_id VARCHAR(255),
+    stop_headsign VARCHAR(255),
+    timepoint SMALLINT,
+    pickup_booking_rule_id VARCHAR(255),
+    drop_off_booking_rule_id VARCHAR(255)
+)
