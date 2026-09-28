@@ -10,6 +10,6 @@ public record Trip(
     String blockId,
     String shapeId,
     Integer wheelchairAccessible,
-    String bikesAllowed
+    Integer bikesAllowed
 ) {
 }

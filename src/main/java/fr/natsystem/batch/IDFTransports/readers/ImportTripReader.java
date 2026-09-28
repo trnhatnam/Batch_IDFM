@@ -43,7 +43,7 @@ public class ImportTripReader implements ReaderStrategy {
                         getFieldValue(fs,"block_id", s -> s),
                         getFieldValue(fs,"shape_id", s -> s),
                         getFieldValue(fs,"wheelchair_accessible", Integer::valueOf),
-                        getFieldValue(fs,"bikes_allowed", s -> s)
+                        getFieldValue(fs,"bikes_allowed", Integer::valueOf)
                 ))
                 .linesToSkip(1)
                 .build();

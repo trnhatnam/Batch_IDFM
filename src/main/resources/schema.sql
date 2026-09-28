@@ -31,4 +31,17 @@ CREATE TABLE IF NOT EXISTS stop_times (
     timepoint SMALLINT,
     pickup_booking_rule_id VARCHAR(255),
     drop_off_booking_rule_id VARCHAR(255)
-)
+);
+
+CREATE TABLE IF NOT EXISTS trips (
+    route_id VARCHAR(255),
+    service_id VARCHAR(255),
+    trip_id VARCHAR(255),
+    trip_headsign VARCHAR(255),
+    trip_short_name VARCHAR(255),
+    direction_id SMALLINT,
+    block_id VARCHAR(255),
+    shape_id VARCHAR(255),
+    wheelchair_accessible SMALLINT,
+    bikes_allowed SMALLINT
+);
