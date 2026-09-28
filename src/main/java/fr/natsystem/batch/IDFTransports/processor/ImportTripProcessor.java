@@ -5,7 +5,7 @@ import org.springframework.batch.infrastructure.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
 
-@Component("importStopTimesProcessor")
+@Component("importTripProcessor")
 public class ImportTripProcessor implements ProcessorStrategy {
 
     @Override

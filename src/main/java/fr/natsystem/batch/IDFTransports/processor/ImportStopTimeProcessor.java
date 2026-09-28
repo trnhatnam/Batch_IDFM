@@ -10,7 +10,7 @@ import java.time.Duration;
 import java.util.Optional;
 
 
-@Component("importStopTimesProcessor")
+@Component("importStopTimeProcessor")
 public class ImportStopTimeProcessor implements ProcessorStrategy {
 
     private final StopTimesMapper stopTimesMapper;
