@@ -15,21 +15,21 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class ImportStopTimeJobConfig extends ImportJobConfig {
 
     public ImportStopTimeJobConfig(
-            @Qualifier("importStopTimesReader") ReaderStrategy readerStrategy,
-            @Qualifier("importStopTimesWriter") WriterStrategy writerStrategy,
-            @Qualifier("importStopTimesProcessor") ProcessorStrategy processorStrategy,
+            @Qualifier("importStopTimeReader") ReaderStrategy readerStrategy,
+            @Qualifier("importStopTimeWriter") WriterStrategy writerStrategy,
+            @Qualifier("importStopTimeProcessor") ProcessorStrategy processorStrategy,
             JobRepository jobRepository,
             PlatformTransactionManager transactionManager) {
         super(readerStrategy, writerStrategy, processorStrategy, jobRepository, transactionManager);
     }
 
     @Bean
-    public Job importStopTimesJob(@Qualifier("importStopTimesStep") Step importStep){
+    public Job importStopTimeJob(@Qualifier("importStopTimeStep") Step importStep){
         return createImportJob("importStopTimesJob", importStep);
     }
 
     @Bean
-    public Step importStopTimesStep(){
-        return createImportStep("importStopTimesStep");
+    public Step importStopTimeStep(){
+        return createImportStep("importStopTimeStep");
     }
 }
