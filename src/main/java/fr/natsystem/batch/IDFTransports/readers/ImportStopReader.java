@@ -7,7 +7,8 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.Optional;
+
+import static fr.natsystem.batch.IDFTransports.utils.ReaderUtils.getFieldValue;
 
 @Component("importStopReader")
 public class ImportStopReader implements ReaderStrategy {
@@ -39,23 +40,26 @@ public class ImportStopReader implements ReaderStrategy {
                         "stop_access"
                 )
                 .fieldSetMapper(fs -> new Stop(
-                        fs.readString("stop_id"),
-                        fs.readString("stop_code"),
-                        fs.readString("stop_name"),
-                        fs.readString("stop_desc"),
-                        Optional.ofNullable(fs.readString("stop_lon")).filter(s -> !s.isBlank()).map(BigDecimal::new).orElse(null),
-                        Optional.ofNullable(fs.readString("stop_lat")).filter(s -> !s.isBlank()).map(BigDecimal::new).orElse(null),
-                        fs.readString("zone_id"),
-                        fs.readString("stop_url"),
-                        Optional.ofNullable(fs.readString("location_type")).filter(s -> !s.isBlank()).map(Integer::valueOf).orElse(null),
-                        fs.readString("parent_station"),
-                        fs.readString("stop_timezone"),
-                        fs.readString("level_id"),
-                        Optional.ofNullable(fs.readString("wheelchair_boarding")).filter(s -> !s.isBlank()).map(Integer::valueOf).orElse(null),
-                        fs.readString("platform_code"),
-                        fs.readString("stop_access")
+                        getFieldValue(fs,"stop_id", s -> s),
+                        getFieldValue(fs,"stop_code", s -> s),
+                        getFieldValue(fs,"stop_name", s -> s),
+                        getFieldValue(fs,"stop_desc", s -> s),
+                        getFieldValue(fs,"stop_lon", BigDecimal::new),
+                        getFieldValue(fs,"stop_lat", BigDecimal::new),
+                        getFieldValue(fs,"zone_id", s -> s),
+                        getFieldValue(fs,"stop_url", s -> s),
+                        getFieldValue(fs,"location_type", Integer::valueOf),
+                        getFieldValue(fs, "parent_station", s -> s),
+                        getFieldValue(fs, "stop_timezone", s -> s),
+                        getFieldValue(fs, "level_id", s -> s),
+                        getFieldValue(fs,"wheelchair_boarding", Integer::valueOf),
+                        getFieldValue(fs, "platform_code", s -> s),
+                        getFieldValue(fs, "stop_access", s -> s)
                 ))
                 .linesToSkip(1)
                 .build();
     }
+
+
+
 }
