@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 
-@Component("importStopTimesWriter")
+@Component("importStopTimeWriter")
 @RequiredArgsConstructor
 public class ImportStopTimeWriter implements WriterStrategy {
 
