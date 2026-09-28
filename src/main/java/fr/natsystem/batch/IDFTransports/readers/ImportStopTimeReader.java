@@ -7,11 +7,10 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
-import java.util.Optional;
 
 import static fr.natsystem.batch.IDFTransports.utils.ReaderUtils.getFieldValue;
 
-@Component("importStopTimesReader")
+@Component("importStopTimeReader")
 public class ImportStopTimeReader implements ReaderStrategy {
 
     private static final String STOPS_FILE = "stop_times.txt";
@@ -20,7 +19,7 @@ public class ImportStopTimeReader implements ReaderStrategy {
     @Override
     public FlatFileItemReader<StopTime> getCSVReader() {
         return new FlatFileItemReaderBuilder<StopTime>()
-                .name("importStopTimesReader")
+                .name("importStopTimeReader")
                 .resource(new ClassPathResource(STOPS_FILE))
                 .delimited()
                 .delimiter(",")

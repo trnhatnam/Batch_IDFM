@@ -25,7 +25,7 @@ public class ImportStopTimeJobConfig extends ImportJobConfig {
 
     @Bean
     public Job importStopTimeJob(@Qualifier("importStopTimeStep") Step importStep){
-        return createImportJob("importStopTimesJob", importStep);
+        return createImportJob("importStopTimeJob", importStep);
     }
 
     @Bean
