@@ -5,9 +5,11 @@ import fr.natsystem.batch.IDFTransports.models.Trip;
 import org.springframework.batch.infrastructure.item.file.FlatFileItemReader;
 import org.springframework.batch.infrastructure.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Component;
 
 import static fr.natsystem.batch.IDFTransports.utils.ReaderUtils.getFieldValue;
 
+@Component("importTripReader")
 public class ImportTripReader implements ReaderStrategy {
 
     private static final String TRIPS_FILE = "trips.txt";
