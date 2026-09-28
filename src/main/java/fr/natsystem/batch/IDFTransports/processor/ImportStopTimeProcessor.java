@@ -11,11 +11,11 @@ import java.util.Optional;
 
 
 @Component("importStopTimesProcessor")
-public class ImportStopTimesProcessor implements ProcessorStrategy {
+public class ImportStopTimeProcessor implements ProcessorStrategy {
 
     private final StopTimesMapper stopTimesMapper;
 
-    public ImportStopTimesProcessor(StopTimesMapper stopTimesMapper) {
+    public ImportStopTimeProcessor(StopTimesMapper stopTimesMapper) {
         this.stopTimesMapper = stopTimesMapper;
     }
 

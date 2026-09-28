@@ -1,6 +1,6 @@
 package fr.natsystem.batch.IDFTransports.models;
 
-public record Trips(
+public record Trip(
     String routeId,
     String serviceId,
     String tripId,

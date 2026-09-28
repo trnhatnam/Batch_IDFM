@@ -1,7 +1,7 @@
 package fr.natsystem.batch.IDFTransports.readers;
 
 
-import fr.natsystem.batch.IDFTransports.models.Trips;
+import fr.natsystem.batch.IDFTransports.models.Trip;
 import org.springframework.batch.infrastructure.item.file.FlatFileItemReader;
 import org.springframework.batch.infrastructure.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.core.io.ClassPathResource;
@@ -13,8 +13,8 @@ public class ImportTripReader implements ReaderStrategy {
     private static final String TRIPS_FILE = "trips.txt";
 
     @Override
-    public FlatFileItemReader<Trips> getCSVReader() {
-        return new FlatFileItemReaderBuilder<Trips>()
+    public FlatFileItemReader<Trip> getCSVReader() {
+        return new FlatFileItemReaderBuilder<Trip>()
                 .name("importTripsReader")
                 .resource(new ClassPathResource(TRIPS_FILE))
                 .delimited()
@@ -31,7 +31,7 @@ public class ImportTripReader implements ReaderStrategy {
                         "wheelchair_accessible",
                         "bikes_allowed"
                 )
-                .fieldSetMapper(fs -> new Trips(
+                .fieldSetMapper(fs -> new Trip(
                         getFieldValue(fs,"route_id", s -> s),
                         getFieldValue(fs,"service_id", s -> s),
                         getFieldValue(fs,"trip_id", s -> s),
