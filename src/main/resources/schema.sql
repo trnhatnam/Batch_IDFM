@@ -45,3 +45,16 @@ CREATE TABLE IF NOT EXISTS trips (
     wheelchair_accessible SMALLINT,
     bikes_allowed SMALLINT
 );
+
+CREATE TABLE IF NOT EXISTS routes (
+   route_id VARCHAR(255),
+   agency_id VARCHAR(255),
+   route_short_name VARCHAR(255),
+   route_long_name VARCHAR(255),
+   route_desc TEXT,
+   route_type SMALLINT,
+   route_url VARCHAR(255),
+   route_color VARCHAR(255),
+   route_text_color VARCHAR(255),
+   route_sort_order VARCHAR(255)
+)
