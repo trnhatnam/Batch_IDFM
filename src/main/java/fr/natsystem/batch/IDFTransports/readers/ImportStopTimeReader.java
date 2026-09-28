@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import java.time.Duration;
 import java.util.Optional;
 
+import static fr.natsystem.batch.IDFTransports.utils.ReaderUtils.getFieldValue;
+
 @Component("importStopTimesReader")
 public class ImportStopTimeReader implements ReaderStrategy {
 
@@ -39,20 +41,20 @@ public class ImportStopTimeReader implements ReaderStrategy {
                         "drop_off_booking_rule_id"
                 )
                 .fieldSetMapper(fs -> new StopTime(
-                        fs.readString("trip_id"),
-                        Optional.ofNullable(fs.readString("arrival_time")).filter(s -> !s.isBlank()).map(this::getArrivalOrDepartureTime).orElse(null),
-                        Optional.ofNullable(fs.readString("departure_time")).filter(s -> !s.isBlank()).map(this::getArrivalOrDepartureTime).orElse(null),
-                        fs.readString("start_pickup_drop_off_window"),
-                        fs.readString("end_pickup_drop_off_window"),
-                        fs.readString("stop_id"),
-                        Optional.ofNullable(fs.readString("stop_sequence")).filter(s -> !s.isBlank()).map(Integer::valueOf).orElse(null),
-                        Optional.ofNullable(fs.readString("pickup_type")).filter(s -> !s.isBlank()).map(Integer::valueOf).orElse(null),
-                        Optional.ofNullable(fs.readString("drop_off_type")).filter(s -> !s.isBlank()).map(Integer::valueOf).orElse(null),
-                        fs.readString("local_zone_id"),
-                        fs.readString("stop_headsign"),
-                        Optional.ofNullable(fs.readString("timepoint")).filter(s -> !s.isBlank()).map(Integer::valueOf).orElse(null),
-                        fs.readString("pickup_booking_rule_id"),
-                        fs.readString("drop_off_booking_rule_id")
+                        getFieldValue(fs,"trip_id", s -> s),
+                        getFieldValue(fs,"arrival_time", this::getArrivalOrDepartureTime),
+                        getFieldValue(fs,"departure_time", this::getArrivalOrDepartureTime),
+                        getFieldValue(fs,"start_pickup_drop_off_window", s -> s),
+                        getFieldValue(fs,"end_pickup_drop_off_window", s -> s),
+                        getFieldValue(fs,"stop_id", s -> s),
+                        getFieldValue(fs,"stop_sequence", Integer::valueOf),
+                        getFieldValue(fs,"pickup_type", Integer::valueOf),
+                        getFieldValue(fs,"drop_off_type", Integer::valueOf),
+                        getFieldValue(fs,"local_zone_id", s -> s),
+                        getFieldValue(fs,"stop_headsign", s -> s),
+                        getFieldValue(fs,"timepoint", Integer::valueOf),
+                        getFieldValue(fs,"pickup_booking_rule_id", s -> s),
+                        getFieldValue(fs,"drop_off_booking_rule_id", s -> s)
                         ))
                 .linesToSkip(1)
                 .build();
