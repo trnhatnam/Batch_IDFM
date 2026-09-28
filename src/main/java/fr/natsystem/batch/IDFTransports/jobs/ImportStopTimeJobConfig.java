@@ -12,9 +12,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
-public class ImportStopTimesJobConfig extends ImportJobConfig {
+public class ImportStopTimeJobConfig extends ImportJobConfig {
 
-    public ImportStopTimesJobConfig(
+    public ImportStopTimeJobConfig(
             @Qualifier("importStopTimesReader") ReaderStrategy readerStrategy,
             @Qualifier("importStopTimesWriter") WriterStrategy writerStrategy,
             @Qualifier("importStopTimesProcessor") ProcessorStrategy processorStrategy,

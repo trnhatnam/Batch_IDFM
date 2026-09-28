@@ -1,7 +1,6 @@
 package fr.natsystem.batch.IDFTransports.readers;
 
 
-import fr.natsystem.batch.IDFTransports.models.StopTime;
 import fr.natsystem.batch.IDFTransports.models.Trips;
 import org.springframework.batch.infrastructure.item.file.FlatFileItemReader;
 import org.springframework.batch.infrastructure.item.file.builder.FlatFileItemReaderBuilder;
@@ -9,7 +8,7 @@ import org.springframework.core.io.ClassPathResource;
 
 import static fr.natsystem.batch.IDFTransports.utils.ReaderUtils.getFieldValue;
 
-public class ImportTripsReader implements ReaderStrategy {
+public class ImportTripReader implements ReaderStrategy {
 
     private static final String TRIPS_FILE = "trips.txt";
 
