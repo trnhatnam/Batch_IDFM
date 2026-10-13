@@ -1,6 +1,6 @@
 package fr.natsystem.batch.IDFTransports.writers;
 
-import fr.natsystem.batch.IDFTransports.models.Stop;
+import fr.natsystem.batch.IDFTransports.models.Route;
 import org.springframework.batch.infrastructure.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.infrastructure.item.database.builder.JdbcBatchItemWriterBuilder;
 import org.springframework.context.annotation.Bean;
@@ -18,8 +18,8 @@ public class ImportRouteWriter {
     }
 
     @Bean
-    public JdbcBatchItemWriter<Stop> routesDBWriter(){
-        return new JdbcBatchItemWriterBuilder<Stop>()
+    public JdbcBatchItemWriter<Route> routesDBWriter(){
+        return new JdbcBatchItemWriterBuilder<Route>()
                 .dataSource(ds)
                 .sql("""
                     INSERT INTO routes (
