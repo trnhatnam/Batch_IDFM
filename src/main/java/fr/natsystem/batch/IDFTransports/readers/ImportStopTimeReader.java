@@ -3,21 +3,22 @@ package fr.natsystem.batch.IDFTransports.readers;
 import fr.natsystem.batch.IDFTransports.models.StopTime;
 import org.springframework.batch.infrastructure.item.file.FlatFileItemReader;
 import org.springframework.batch.infrastructure.item.file.builder.FlatFileItemReaderBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 
 import static fr.natsystem.batch.IDFTransports.utils.ReaderUtils.getFieldValue;
 
-@Component("importStopTimeReader")
-public class ImportStopTimeReader implements ReaderStrategy {
+@Configuration
+public class ImportStopTimeReader {
 
     private static final String STOPS_FILE = "stop_times.txt";
     private static final int THREE = 3;
 
-    @Override
-    public FlatFileItemReader<StopTime> getCSVReader() {
+    @Bean
+    public FlatFileItemReader<StopTime> stopTimesCSVReader() {
         return new FlatFileItemReaderBuilder<StopTime>()
                 .name("importStopTimeReader")
                 .resource(new ClassPathResource(STOPS_FILE))

@@ -1,21 +1,24 @@
 package fr.natsystem.batch.IDFTransports.writers;
 
 import fr.natsystem.batch.IDFTransports.models.Stop;
-import lombok.RequiredArgsConstructor;
 import org.springframework.batch.infrastructure.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.infrastructure.item.database.builder.JdbcBatchItemWriterBuilder;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 
-@Component("importRouteWriter")
-@RequiredArgsConstructor
-public class ImportRouteWriter implements WriterStrategy {
+@Configuration
+public class ImportRouteWriter {
 
     private final DataSource ds;
 
-    @Override
-    public JdbcBatchItemWriter<Stop> getWriter(){
+    public ImportRouteWriter(DataSource ds) {
+        this.ds = ds;
+    }
+
+    @Bean
+    public JdbcBatchItemWriter<Stop> routesDBWriter(){
         return new JdbcBatchItemWriterBuilder<Stop>()
                 .dataSource(ds)
                 .sql("""

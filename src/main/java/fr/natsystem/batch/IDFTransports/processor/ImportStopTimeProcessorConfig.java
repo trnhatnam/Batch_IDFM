@@ -4,23 +4,24 @@ import fr.natsystem.batch.IDFTransports.dto.StopTimeDTO;
 import fr.natsystem.batch.IDFTransports.mapper.StopTimesMapper;
 import fr.natsystem.batch.IDFTransports.models.StopTime;
 import org.springframework.batch.infrastructure.item.ItemProcessor;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.time.Duration;
 import java.util.Optional;
 
 
-@Component("importStopTimeProcessor")
-public class ImportStopTimeProcessor implements ProcessorStrategy {
+@Configuration
+public class ImportStopTimeProcessorConfig {
 
     private final StopTimesMapper stopTimesMapper;
 
-    public ImportStopTimeProcessor(StopTimesMapper stopTimesMapper) {
+    public ImportStopTimeProcessorConfig(StopTimesMapper stopTimesMapper) {
         this.stopTimesMapper = stopTimesMapper;
     }
 
-    @Override
-    public ItemProcessor getProcessor() {
+    @Bean
+    public ItemProcessor stopTimesProcessor() {
         return (ItemProcessor<StopTime, StopTimeDTO>) stopTime -> stopTimesMapper.toStopTimeDTO(
                 stopTime,
                 Optional.ofNullable(stopTime.arrivalTime())

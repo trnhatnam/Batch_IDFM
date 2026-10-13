@@ -3,18 +3,19 @@ package fr.natsystem.batch.IDFTransports.readers;
 import fr.natsystem.batch.IDFTransports.models.Route;
 import org.springframework.batch.infrastructure.item.file.FlatFileItemReader;
 import org.springframework.batch.infrastructure.item.file.builder.FlatFileItemReaderBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Component;
 
 import static fr.natsystem.batch.IDFTransports.utils.ReaderUtils.getFieldValue;
 
-@Component("importRouteReader")
-public class ImportRouteReader implements ReaderStrategy {
+@Configuration
+public class ImportRouteReader  {
 
     private static final String ROUTES_FILE = "routes.txt";
 
-    @Override
-    public FlatFileItemReader<Route> getCSVReader() {
+    @Bean
+    public FlatFileItemReader<Route> routesCSVReader() {
         return new FlatFileItemReaderBuilder<Route>()
                 .name("importStopReader")
                 .resource(new ClassPathResource(ROUTES_FILE))

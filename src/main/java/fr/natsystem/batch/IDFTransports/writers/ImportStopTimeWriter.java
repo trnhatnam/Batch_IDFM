@@ -1,21 +1,24 @@
 package fr.natsystem.batch.IDFTransports.writers;
 
 import fr.natsystem.batch.IDFTransports.dto.StopTimeDTO;
-import lombok.RequiredArgsConstructor;
 import org.springframework.batch.infrastructure.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.infrastructure.item.database.builder.JdbcBatchItemWriterBuilder;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 
-@Component("importStopTimeWriter")
-@RequiredArgsConstructor
-public class ImportStopTimeWriter implements WriterStrategy {
+@Configuration
+public class ImportStopTimeWriter {
 
     private final DataSource ds;
 
-    @Override
-    public JdbcBatchItemWriter<StopTimeDTO> getWriter(){
+    public ImportStopTimeWriter(DataSource ds) {
+        this.ds = ds;
+    }
+
+    @Bean
+    public JdbcBatchItemWriter<StopTimeDTO> stopTimesDBWriter(){
         return new JdbcBatchItemWriterBuilder<StopTimeDTO>()
                 .dataSource(ds)
                 .sql("""

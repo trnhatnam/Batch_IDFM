@@ -1,35 +1,45 @@
 package fr.natsystem.batch.IDFTransports.jobs;
 
-import fr.natsystem.batch.IDFTransports.processor.ProcessorStrategy;
-import fr.natsystem.batch.IDFTransports.readers.ReaderStrategy;
-import fr.natsystem.batch.IDFTransports.writers.WriterStrategy;
 import org.springframework.batch.core.job.Job;
+import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.Step;
+import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.infrastructure.item.database.JdbcBatchItemWriter;
+import org.springframework.batch.infrastructure.item.file.FlatFileItemReader;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
-public class ImportRouteJobConfig extends ImportJobConfig {
+public class ImportRouteJobConfig {
 
-    public ImportRouteJobConfig(
-            @Qualifier("importRouteReader") ReaderStrategy readerStrategy,
-            @Qualifier("importRouteWriter") WriterStrategy writerStrategy,
-            @Qualifier("importRouteProcessor") ProcessorStrategy processorStrategy,
-            JobRepository jobRepository,
-            PlatformTransactionManager transactionManager) {
-        super(readerStrategy, writerStrategy, processorStrategy, jobRepository, transactionManager);
+    private static int CHUNK_SIZE = 200;
+    private final JobRepository jobRepository;
+    private final PlatformTransactionManager transactionManager;
+
+    public ImportRouteJobConfig(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+        this.jobRepository = jobRepository;
+        this.transactionManager = transactionManager;
     }
 
     @Bean
     public Job importRouteJob(@Qualifier("importRouteStep") Step importStep){
-        return createImportJob("importRouteJob", importStep);
+        return new JobBuilder(jobRepository)
+                .start(importStep)
+                .build();
     }
 
     @Bean
-    public Step importRouteStep(){
-        return createImportStep("importRouteStep");
+    public Step importRouteStep(@Qualifier("routesCSVReader") FlatFileItemReader reader,
+                                @Qualifier("routesDBWriter") JdbcBatchItemWriter writer) {
+        return new StepBuilder(jobRepository)
+                .chunk(CHUNK_SIZE)
+                .transactionManager(transactionManager)
+                .reader(reader)
+                .writer(writer)
+                .build();
+
     }
 }

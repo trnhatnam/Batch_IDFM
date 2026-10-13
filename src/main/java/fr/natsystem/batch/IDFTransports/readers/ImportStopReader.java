@@ -3,20 +3,21 @@ package fr.natsystem.batch.IDFTransports.readers;
 import fr.natsystem.batch.IDFTransports.models.Stop;
 import org.springframework.batch.infrastructure.item.file.FlatFileItemReader;
 import org.springframework.batch.infrastructure.item.file.builder.FlatFileItemReaderBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
 import static fr.natsystem.batch.IDFTransports.utils.ReaderUtils.getFieldValue;
 
-@Component("importStopReader")
-public class ImportStopReader implements ReaderStrategy {
+@Configuration
+public class ImportStopReader {
 
     private static final String STOPS_FILE = "stops.txt";
 
-    @Override
-    public FlatFileItemReader<Stop> getCSVReader() {
+    @Bean
+    public FlatFileItemReader<Stop> stopsCSVReader() {
         return new FlatFileItemReaderBuilder<Stop>()
                 .name("importStopReader")
                 .resource(new ClassPathResource(STOPS_FILE))
