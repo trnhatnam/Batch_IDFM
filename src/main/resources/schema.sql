@@ -53,8 +53,20 @@ CREATE TABLE IF NOT EXISTS routes (
    route_long_name VARCHAR(255),
    route_desc TEXT,
    route_type SMALLINT,
-   route_url VARCHAR(255),
+   route_url TEXT,
    route_color VARCHAR(255),
    route_text_color VARCHAR(255),
    route_sort_order VARCHAR(255)
-)
+);
+
+CREATE TABLE IF NOT EXISTS agency (
+   agency_id VARCHAR(255),
+   agency_name VARCHAR(255),
+   agency_url TEXT,
+   agency_timezone VARCHAR(255),
+   agency_lang VARCHAR(255),
+   agency_phone VARCHAR(255),
+   agency_email VARCHAR(255),
+   agency_fare_url TEXT,
+   ticketing_deep_link_id VARCHAR(255)
+);
