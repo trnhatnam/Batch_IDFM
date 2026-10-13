@@ -41,20 +41,20 @@ public class ImportStopTimeReader {
                         "drop_off_booking_rule_id"
                 )
                 .fieldSetMapper(fs -> new StopTime(
-                        getFieldValue(fs,"trip_id", s -> s),
+                        getFieldValue(fs,"trip_id", String::valueOf),
                         getFieldValue(fs,"arrival_time", this::getArrivalOrDepartureTime),
                         getFieldValue(fs,"departure_time", this::getArrivalOrDepartureTime),
-                        getFieldValue(fs,"start_pickup_drop_off_window", s -> s),
-                        getFieldValue(fs,"end_pickup_drop_off_window", s -> s),
-                        getFieldValue(fs,"stop_id", s -> s),
+                        getFieldValue(fs,"start_pickup_drop_off_window", String::valueOf),
+                        getFieldValue(fs,"end_pickup_drop_off_window", String::valueOf),
+                        getFieldValue(fs,"stop_id", String::valueOf),
                         getFieldValue(fs,"stop_sequence", Integer::valueOf),
                         getFieldValue(fs,"pickup_type", Integer::valueOf),
                         getFieldValue(fs,"drop_off_type", Integer::valueOf),
-                        getFieldValue(fs,"local_zone_id", s -> s),
-                        getFieldValue(fs,"stop_headsign", s -> s),
+                        getFieldValue(fs,"local_zone_id", String::valueOf),
+                        getFieldValue(fs,"stop_headsign", String::valueOf),
                         getFieldValue(fs,"timepoint", Integer::valueOf),
-                        getFieldValue(fs,"pickup_booking_rule_id", s -> s),
-                        getFieldValue(fs,"drop_off_booking_rule_id", s -> s)
+                        getFieldValue(fs,"pickup_booking_rule_id", String::valueOf),
+                        getFieldValue(fs,"drop_off_booking_rule_id", String::valueOf)
                         ))
                 .linesToSkip(1)
                 .build();

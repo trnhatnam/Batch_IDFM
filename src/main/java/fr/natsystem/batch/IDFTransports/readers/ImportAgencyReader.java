@@ -33,15 +33,15 @@ public class ImportAgencyReader {
                         "ticketing_deep_link_id"
                 )
                 .fieldSetMapper(fs -> new Agency(
-                        getFieldValue(fs,"agency_id", s -> s),
-                        getFieldValue(fs, "agency_name", s -> s),
-                        getFieldValue(fs,"agency_url", s -> s),
-                        getFieldValue(fs,"agency_timezone", s -> s),
-                        getFieldValue(fs,"agency_lang", s -> s),
-                        getFieldValue(fs,"agency_phone", s -> s),
-                        getFieldValue(fs, "agency_email", s -> s),
-                        getFieldValue(fs,"agency_fare_url", s -> s),
-                        getFieldValue(fs, "ticketing_deep_link_id", s -> s)
+                        getFieldValue(fs,"agency_id", String::valueOf),
+                        getFieldValue(fs, "agency_name", String::valueOf),
+                        getFieldValue(fs,"agency_url", String::valueOf),
+                        getFieldValue(fs,"agency_timezone", String::valueOf),
+                        getFieldValue(fs,"agency_lang", String::valueOf),
+                        getFieldValue(fs,"agency_phone", String::valueOf),
+                        getFieldValue(fs, "agency_email", String::valueOf),
+                        getFieldValue(fs,"agency_fare_url", String::valueOf),
+                        getFieldValue(fs, "ticketing_deep_link_id", String::valueOf)
                 ))
                 .linesToSkip(1)
                 .build();

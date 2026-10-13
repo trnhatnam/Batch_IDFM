@@ -35,14 +35,14 @@ public class ImportTripReader {
                         "bikes_allowed"
                 )
                 .fieldSetMapper(fs -> new Trip(
-                        getFieldValue(fs,"route_id", s -> s),
-                        getFieldValue(fs,"service_id", s -> s),
-                        getFieldValue(fs,"trip_id", s -> s),
-                        getFieldValue(fs,"trip_headsign", s -> s),
-                        getFieldValue(fs,"trip_short_name", s -> s),
+                        getFieldValue(fs,"route_id", String::valueOf),
+                        getFieldValue(fs,"service_id", String::valueOf),
+                        getFieldValue(fs,"trip_id", String::valueOf),
+                        getFieldValue(fs,"trip_headsign", String::valueOf),
+                        getFieldValue(fs,"trip_short_name", String::valueOf),
                         getFieldValue(fs,"direction_id", Integer::valueOf),
-                        getFieldValue(fs,"block_id", s -> s),
-                        getFieldValue(fs,"shape_id", s -> s),
+                        getFieldValue(fs,"block_id", String::valueOf),
+                        getFieldValue(fs,"shape_id", String::valueOf),
                         getFieldValue(fs,"wheelchair_accessible", Integer::valueOf),
                         getFieldValue(fs,"bikes_allowed", Integer::valueOf)
                 ))

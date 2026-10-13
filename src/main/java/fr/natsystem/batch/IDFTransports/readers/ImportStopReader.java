@@ -41,21 +41,21 @@ public class ImportStopReader {
                         "stop_access"
                 )
                 .fieldSetMapper(fs -> new Stop(
-                        getFieldValue(fs,"stop_id", s -> s),
-                        getFieldValue(fs,"stop_code", s -> s),
-                        getFieldValue(fs,"stop_name", s -> s),
-                        getFieldValue(fs,"stop_desc", s -> s),
+                        getFieldValue(fs,"stop_id", String::valueOf),
+                        getFieldValue(fs,"stop_code", String::valueOf),
+                        getFieldValue(fs,"stop_name", String::valueOf),
+                        getFieldValue(fs,"stop_desc", String::valueOf),
                         getFieldValue(fs,"stop_lon", BigDecimal::new),
                         getFieldValue(fs,"stop_lat", BigDecimal::new),
-                        getFieldValue(fs,"zone_id", s -> s),
-                        getFieldValue(fs,"stop_url", s -> s),
+                        getFieldValue(fs,"zone_id", String::valueOf),
+                        getFieldValue(fs,"stop_url", String::valueOf),
                         getFieldValue(fs,"location_type", Integer::valueOf),
-                        getFieldValue(fs, "parent_station", s -> s),
-                        getFieldValue(fs, "stop_timezone", s -> s),
-                        getFieldValue(fs, "level_id", s -> s),
+                        getFieldValue(fs, "parent_station", String::valueOf),
+                        getFieldValue(fs, "stop_timezone", String::valueOf),
+                        getFieldValue(fs, "level_id", String::valueOf),
                         getFieldValue(fs,"wheelchair_boarding", Integer::valueOf),
-                        getFieldValue(fs, "platform_code", s -> s),
-                        getFieldValue(fs, "stop_access", s -> s)
+                        getFieldValue(fs, "platform_code", String::valueOf),
+                        getFieldValue(fs, "stop_access", String::valueOf)
                 ))
                 .linesToSkip(1)
                 .build();

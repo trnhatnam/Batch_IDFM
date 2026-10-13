@@ -34,16 +34,16 @@ public class ImportRouteReader  {
                         "route_sort_order"
                 )
                 .fieldSetMapper(fs -> new Route(
-                        getFieldValue(fs,"route_id", s -> s),
-                        getFieldValue(fs,"agency_id", s -> s),
-                        getFieldValue(fs,"route_short_name", s -> s),
-                        getFieldValue(fs,"route_long_name", s -> s),
-                        getFieldValue(fs,"route_desc", s -> s),
+                        getFieldValue(fs,"route_id", String::valueOf),
+                        getFieldValue(fs,"agency_id", String::valueOf),
+                        getFieldValue(fs,"route_short_name", String::valueOf),
+                        getFieldValue(fs,"route_long_name", String::valueOf),
+                        getFieldValue(fs,"route_desc", String::valueOf),
                         getFieldValue(fs,"route_type", Integer::valueOf),
-                        getFieldValue(fs,"route_url", s -> s),
-                        getFieldValue(fs,"route_color", s -> s),
-                        getFieldValue(fs, "route_text_color", s -> s),
-                        getFieldValue(fs, "route_sort_order", s -> s)
+                        getFieldValue(fs,"route_url", String::valueOf),
+                        getFieldValue(fs,"route_color", String::valueOf),
+                        getFieldValue(fs, "route_text_color", String::valueOf),
+                        getFieldValue(fs, "route_sort_order", String::valueOf)
                 ))
                 .linesToSkip(1)
                 .build();
