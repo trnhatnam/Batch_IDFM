@@ -1,4 +1,13 @@
-CREATE TABLE IF NOT EXISTS stops (
+DROP TABLE IF EXISTS agency;
+DROP TABLE IF EXISTS stop_times;
+DROP TABLE IF EXISTS stops;
+DROP TABLE IF EXISTS trips;
+DROP TABLE IF EXISTS routes;
+
+
+
+
+CREATE TABLE stops (
     stop_id              VARCHAR(255),
     stop_code            VARCHAR(255),
     stop_name            VARCHAR(255),
@@ -16,7 +25,7 @@ CREATE TABLE IF NOT EXISTS stops (
     stop_access          VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS stop_times (
+CREATE TABLE stop_times (
     trip_id VARCHAR(255),
     arrival_time BIGINT,
     departure_time BIGINT ,
@@ -33,8 +42,8 @@ CREATE TABLE IF NOT EXISTS stop_times (
     drop_off_booking_rule_id VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS trips (
-    route_id VARCHAR(255),
+CREATE TABLE  trips (
+    route_id VARCHAR(255) PRIMARY KEY,
     service_id VARCHAR(255),
     trip_id VARCHAR(255),
     trip_headsign VARCHAR(255),
@@ -46,7 +55,7 @@ CREATE TABLE IF NOT EXISTS trips (
     bikes_allowed SMALLINT
 );
 
-CREATE TABLE IF NOT EXISTS routes (
+CREATE TABLE routes (
    route_id VARCHAR(255),
    agency_id VARCHAR(255),
    route_short_name VARCHAR(255),
@@ -59,7 +68,7 @@ CREATE TABLE IF NOT EXISTS routes (
    route_sort_order VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS agency (
+CREATE TABLE agency (
    agency_id VARCHAR(255),
    agency_name VARCHAR(255),
    agency_url TEXT,
