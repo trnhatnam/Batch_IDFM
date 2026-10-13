@@ -20,8 +20,8 @@ public class ImportStopTimeProcessorConfig {
         this.stopTimesMapper = stopTimesMapper;
     }
 
-    @Bean
-    public ItemProcessor stopTimesProcessor() {
+    @Bean(name="stopTimesProcessor")
+    public ItemProcessor importProcessor() {
         return (ItemProcessor<StopTime, StopTimeDTO>) stopTime -> stopTimesMapper.toStopTimeDTO(
                 stopTime,
                 Optional.ofNullable(stopTime.arrivalTime())
