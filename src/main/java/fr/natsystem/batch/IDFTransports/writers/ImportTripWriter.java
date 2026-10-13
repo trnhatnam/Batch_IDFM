@@ -1,6 +1,6 @@
 package fr.natsystem.batch.IDFTransports.writers;
 
-import fr.natsystem.batch.IDFTransports.models.Stop;
+import fr.natsystem.batch.IDFTransports.models.Trip;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.infrastructure.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.infrastructure.item.database.builder.JdbcBatchItemWriterBuilder;
@@ -16,8 +16,8 @@ public class ImportTripWriter  {
     private final DataSource ds;
 
     @Bean
-    public JdbcBatchItemWriter<Stop> tripsDBWriter(){
-        return new JdbcBatchItemWriterBuilder<Stop>()
+    public JdbcBatchItemWriter<Trip> tripsDBWriter(){
+        return new JdbcBatchItemWriterBuilder<Trip>()
                 .dataSource(ds)
                 .sql("""
                     INSERT INTO trips (
