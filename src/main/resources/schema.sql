@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS routes;
 
 
 CREATE TABLE stops (
-    stop_id              VARCHAR(255),
+    stop_id              VARCHAR(255) PRIMARY KEY,
     stop_code            VARCHAR(255),
     stop_name            VARCHAR(255),
     stop_desc            TEXT,
@@ -43,9 +43,9 @@ CREATE TABLE stop_times (
 );
 
 CREATE TABLE  trips (
-    route_id VARCHAR(255) PRIMARY KEY,
+    route_id VARCHAR(255),
     service_id VARCHAR(255),
-    trip_id VARCHAR(255),
+    trip_id VARCHAR(255) PRIMARY KEY,
     trip_headsign VARCHAR(255),
     trip_short_name VARCHAR(255),
     direction_id SMALLINT,
@@ -56,7 +56,7 @@ CREATE TABLE  trips (
 );
 
 CREATE TABLE routes (
-   route_id VARCHAR(255),
+   route_id VARCHAR(255) PRIMARY KEY,
    agency_id VARCHAR(255),
    route_short_name VARCHAR(255),
    route_long_name VARCHAR(255),
@@ -69,7 +69,7 @@ CREATE TABLE routes (
 );
 
 CREATE TABLE agency (
-   agency_id VARCHAR(255),
+   agency_id VARCHAR(255) PRIMARY KEY,
    agency_name VARCHAR(255),
    agency_url TEXT,
    agency_timezone VARCHAR(255),
