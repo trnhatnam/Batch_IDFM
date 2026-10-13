@@ -1,5 +1,6 @@
 package fr.natsystem.batch.IDFTransports.jobs;
 
+import fr.natsystem.batch.IDFTransports.listener.StepProgressListener;
 import fr.natsystem.batch.IDFTransports.models.Route;
 import org.springframework.batch.core.job.Job;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -36,13 +37,15 @@ public class ImportRouteJobConfig {
     @Bean
     public Step importRouteStep(@Qualifier("routesCSVReader") FlatFileItemReader<Route> reader,
                                 @Qualifier("routesDBWriter") JdbcBatchItemWriter<Route> writer,
-                                @Qualifier("routesProcessor") ItemProcessor<Route, Route> processor) {
+                                @Qualifier("routesProcessor") ItemProcessor<Route, Route> processor,
+                                StepProgressListener listener) {
         return new StepBuilder(jobRepository)
                 .<Route,Route>chunk(CHUNK_SIZE)
                 .transactionManager(transactionManager)
                 .reader(reader)
                 .processor(processor)
                 .writer(writer)
+                .listener(listener)
                 .build();
 
     }
