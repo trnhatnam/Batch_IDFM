@@ -1,10 +1,12 @@
 package fr.natsystem.batch.IDFTransports.jobs;
 
+import fr.natsystem.batch.IDFTransports.models.Trip;
 import org.springframework.batch.core.job.Job;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.Step;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.infrastructure.item.ItemProcessor;
 import org.springframework.batch.infrastructure.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.infrastructure.item.file.FlatFileItemReader;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,12 +34,14 @@ public class ImportTripJobConfig {
     }
 
     @Bean
-    public Step importTripStep(@Qualifier("tripsCSVReader") FlatFileItemReader reader,
-                               @Qualifier("tripsDBWriter") JdbcBatchItemWriter writer) {
+    public Step importTripStep(@Qualifier("tripsCSVReader") FlatFileItemReader<Trip> reader,
+                               @Qualifier("tripsDBWriter") JdbcBatchItemWriter<Trip> writer,
+                               @Qualifier("tripProcessor") ItemProcessor<Trip,Trip> processor) {
         return new StepBuilder(jobRepository)
-                .chunk(CHUNK_SIZE)
+                .<Trip, Trip>chunk(CHUNK_SIZE)
                 .transactionManager(transactionManager)
                 .reader(reader)
+                .processor(processor)
                 .writer(writer)
                 .build();
 
