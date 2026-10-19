@@ -14,7 +14,10 @@ public class StepProgressListener implements StepExecutionListener {
 
     @Override
     public ExitStatus afterStep(StepExecution stepExecution){
-        log.info("Filtrés : {}", stepExecution.getFilterCount());
+        log.info("Lectures : {}, Intégrés : {}, Filtrés : {}",
+                stepExecution.getReadCount(),
+                stepExecution.getWriteCount(),
+                stepExecution.getFilterCount());
         return stepExecution.getExitStatus();
     }
 }
