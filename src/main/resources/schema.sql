@@ -5,6 +5,10 @@ DROP TABLE IF EXISTS trips;
 DROP TABLE IF EXISTS routes;
 
 
+DROP TABLE IF EXISTS trips_staging;
+DROP TABLE IF EXISTS stop_times_staging;
+
+
 
 
 CREATE TABLE stops (
@@ -39,7 +43,8 @@ CREATE TABLE stop_times (
     stop_headsign VARCHAR(255),
     timepoint SMALLINT,
     pickup_booking_rule_id VARCHAR(255),
-    drop_off_booking_rule_id VARCHAR(255)
+    drop_off_booking_rule_id VARCHAR(255),
+    UNIQUE(trip_id, stop_sequence)
 );
 
 CREATE TABLE  trips (
@@ -78,4 +83,35 @@ CREATE TABLE agency (
    agency_email VARCHAR(255),
    agency_fare_url TEXT,
    ticketing_deep_link_id VARCHAR(255)
+);
+
+-- staging tables
+CREATE TABLE  trips_staging (
+    route_id VARCHAR(255),
+    service_id VARCHAR(255),
+    trip_id VARCHAR(255) PRIMARY KEY,
+    trip_headsign VARCHAR(255),
+    trip_short_name VARCHAR(255),
+    direction_id SMALLINT,
+    block_id VARCHAR(255),
+    shape_id VARCHAR(255),
+    wheelchair_accessible SMALLINT,
+    bikes_allowed SMALLINT
+);
+
+CREATE TABLE stop_times_staging (
+    trip_id VARCHAR(255),
+    arrival_time BIGINT,
+    departure_time BIGINT ,
+    start_pickup_drop_off_window VARCHAR(255),
+    end_pickup_drop_off_window VARCHAR(255),
+    stop_id VARCHAR(255),
+    stop_sequence SMALLINT,
+    pickup_type SMALLINT,
+    drop_off_type SMALLINT,
+    local_zone_id VARCHAR(255),
+    stop_headsign VARCHAR(255),
+    timepoint SMALLINT,
+    pickup_booking_rule_id VARCHAR(255),
+    drop_off_booking_rule_id VARCHAR(255)
 );
