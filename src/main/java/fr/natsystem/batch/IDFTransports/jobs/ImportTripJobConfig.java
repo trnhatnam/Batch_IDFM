@@ -1,5 +1,6 @@
 package fr.natsystem.batch.IDFTransports.jobs;
 
+import fr.natsystem.batch.IDFTransports.listener.StepProgressListener;
 import fr.natsystem.batch.IDFTransports.models.Trip;
 import org.springframework.batch.core.job.Job;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -35,14 +36,16 @@ public class ImportTripJobConfig {
 
     @Bean
     public Step importTripStep(@Qualifier("tripsCSVReader") FlatFileItemReader<Trip> reader,
-                               @Qualifier("tripsDBWriter") JdbcBatchItemWriter<Trip> writer,
-                               @Qualifier("tripProcessor") ItemProcessor<Trip,Trip> processor) {
+                               @Qualifier("tripsStagingWriter") JdbcBatchItemWriter<Trip> writer,
+                               @Qualifier("tripProcessor") ItemProcessor<Trip,Trip> processor,
+                               StepProgressListener listener) {
         return new StepBuilder(jobRepository)
                 .<Trip, Trip>chunk(CHUNK_SIZE)
                 .transactionManager(transactionManager)
                 .reader(reader)
                 .processor(processor)
                 .writer(writer)
+                .listener(listener)
                 .build();
 
     }
