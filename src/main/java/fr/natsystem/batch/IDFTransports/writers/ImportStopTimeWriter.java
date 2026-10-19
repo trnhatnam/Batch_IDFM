@@ -17,12 +17,54 @@ public class ImportStopTimeWriter {
         this.ds = ds;
     }
 
-    @Bean
-    public JdbcBatchItemWriter<StopTimeDTO> stopTimesDBWriter(){
+    @Bean(name="stopTimesDBWriter")
+    public JdbcBatchItemWriter<StopTimeDTO> importWriter(){
         return new JdbcBatchItemWriterBuilder<StopTimeDTO>()
                 .dataSource(ds)
                 .sql("""
                     INSERT INTO stop_times (
+                        trip_id,
+                        arrival_time,
+                        departure_time,
+                        start_pickup_drop_off_window,
+                        end_pickup_drop_off_window,
+                        stop_id,
+                        stop_sequence,
+                        pickup_type,
+                        drop_off_type,
+                        local_zone_id,
+                        stop_headsign,
+                        timepoint,
+                        pickup_booking_rule_id,
+                        drop_off_booking_rule_id
+                    ) VALUES (
+                        :tripId,
+                        :arrivalTimeSeconds,
+                        :departureTimeSeconds,
+                        :startPickupDropOffWindow,
+                        :endPickupDropOffWindow,
+                        :stopId,
+                        :stopSequence,
+                        :pickupType,
+                        :dropOffType,
+                        :localZoneId,
+                        :stopHeadsign,
+                        :timepoint,
+                        :pickupBookingRuleId,
+                        :dropOffBookingRuleId
+                    );
+                """
+                )
+                .beanMapped()
+                .build();
+    }
+
+    @Bean(name="stopTimesStagingWriter")
+    public JdbcBatchItemWriter<StopTimeDTO> stagingWriter(){
+        return new JdbcBatchItemWriterBuilder<StopTimeDTO>()
+                .dataSource(ds)
+                .sql("""
+                    INSERT INTO stop_times_staging (
                         trip_id,
                         arrival_time,
                         departure_time,
