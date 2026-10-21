@@ -63,21 +63,20 @@ public class ImportStopTimeJobConfig  {
     @Bean
     public Step importStopTimesStep(StepProgressListener listener){
         String query = """
-            MERGE INTO stop_times st
-                    USING (
-                        SELECT DISTINCT ON (trip_id, stop_sequence) *
-                        FROM stop_times_staging
-                        ORDER BY trip_id,
-                                 stop_sequence,
-                                 hash_record_extended(stop_times_staging.*,0) DESC
-                    ) sts
-            ON st.trip_id = sts.trip_id AND st.stop_sequence = sts.stop_sequence
-            WHEN MATCHED AND hash_record_extended(sts.*,0) > hash_record_extended(st.*,0) THEN
-                UPDATE SET (trip_id,arrival_time,departure_time,start_pickup_drop_off_window,end_pickup_drop_off_window,stop_id,stop_sequence,pickup_type,drop_off_type,local_zone_id,stop_headsign,timepoint,pickup_booking_rule_id,drop_off_booking_rule_id)
-                = (sts.trip_id,sts.arrival_time,sts.departure_time,sts.start_pickup_drop_off_window,sts.end_pickup_drop_off_window,sts.stop_id,sts.stop_sequence,sts.pickup_type,sts.drop_off_type,sts.local_zone_id,sts.stop_headsign,sts.timepoint,sts.pickup_booking_rule_id,sts.drop_off_booking_rule_id)
-            WHEN NOT MATCHED THEN
-                INSERT (trip_id,arrival_time,departure_time,start_pickup_drop_off_window,end_pickup_drop_off_window,stop_id,stop_sequence,pickup_type,drop_off_type,local_zone_id,stop_headsign,timepoint,pickup_booking_rule_id,drop_off_booking_rule_id)
-                VALUES (sts.trip_id,sts.arrival_time,sts.departure_time,sts.start_pickup_drop_off_window,sts.end_pickup_drop_off_window,sts.stop_id,sts.stop_sequence,sts.pickup_type,sts.drop_off_type,sts.local_zone_id,sts.stop_headsign,sts.timepoint,sts.pickup_booking_rule_id,sts.drop_off_booking_rule_id);
+            WITH ranked AS (
+                SELECT sts.*,
+                ROW_NUMBER() OVER (
+                    PARTITION BY (trip_id, stop_sequence)
+                    ORDER BY arrival_time, departure_time
+                ) rn
+                FROM stop_times_staging sts
+            )
+            INSERT INTO stop_times 
+            SELECT trip_id,arrival_time,departure_time,start_pickup_drop_off_window,end_pickup_drop_off_window,stop_id,stop_sequence,pickup_type,drop_off_type,local_zone_id,stop_headsign,timepoint,pickup_booking_rule_id,drop_off_booking_rule_id
+            FROM ranked 
+            WHERE rn = 1
+            ON CONFLICT (trip_id, stop_sequence)
+            DO NOTHING;
         """;
 
         return new StepBuilder(jobRepository)
