@@ -14,8 +14,8 @@ import static fr.natsystem.batch.IDFTransports.utils.ReaderUtils.getFieldValue;
 @Configuration
 public class ImportStopTimeReader {
 
-    private static final String STOPS_FILE = "stop_times.txt";
-    private static final int THREE = 3;
+    private static final String STOPS_FILE = "stop_times_new.txt";
+    private static final int N_TIME_FIELDS = 3;
 
     @Bean
     public FlatFileItemReader<StopTime> stopTimesCSVReader() {
@@ -63,7 +63,7 @@ public class ImportStopTimeReader {
     public Duration getArrivalOrDepartureTime(String time){
         String[] p = time.split(":");
         Duration d = null;
-        if (p.length == THREE) {
+        if (p.length == N_TIME_FIELDS) {
             d = Duration.ofHours(Long.parseLong(p[0]))
                     .plusMinutes(Long.parseLong(p[1]))
                     .plusSeconds(Long.parseLong(p[2]));
