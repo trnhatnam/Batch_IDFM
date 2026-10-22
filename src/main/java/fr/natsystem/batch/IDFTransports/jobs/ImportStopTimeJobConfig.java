@@ -36,10 +36,12 @@ public class ImportStopTimeJobConfig  {
     @Bean
     public Job importStopTimesJob(@Qualifier("stagingStopTimesStep") Step stagingStep,
                                   @Qualifier("importStopTimesStep") Step importStep,
+                                  @Qualifier("deleteObsoleteStopTimesStep") Step deleteObsoleteStep,
                                   @Qualifier("cleanStopTimesStagingTableStep") Step cleaningStep){
         return new JobBuilder(jobRepository)
                 .start(stagingStep)
                 .next(importStep)
+                .next(deleteObsoleteStep)
                 .next(cleaningStep)
                 .build();
     }
@@ -157,11 +159,37 @@ public class ImportStopTimeJobConfig  {
     }
 
     @Bean
+    public Step deleteObsoleteStopTimesStep(){
+        String query = """
+            DELETE FROM stop_times st
+            WHERE NOT EXISTS (
+                SELECT 1
+                FROM stop_times_staging s
+                WHERE s.trip_id = st.trip_id
+                  AND s.stop_sequence = st.stop_sequence
+            );
+        """;
+        return new StepBuilder("deleteObsoleteStopTimesStep",jobRepository)
+                .tasklet((contribution, chunkContext) -> {
+                    jdbcTemplate.execute("""
+                        CREATE INDEX IF NOT EXISTS idx_stop_times_staging_key 
+                        ON stop_times_staging(trip_id, stop_sequence)
+                    """);
+                    jdbcTemplate.update(query);
+                    jdbcTemplate.execute("""
+                        DROP INDEX idx_stop_times_staging_key
+                    """);
+                    return RepeatStatus.FINISHED;
+                },transactionManager)
+                .build();
+    }
+
+    @Bean
     public Step cleanStopTimesStagingTableStep(){
         String query = "TRUNCATE stop_times_staging";
         return new StepBuilder("cleanTablesStep",jobRepository)
                 .tasklet((contribution, chunkContext) -> {
-                    jdbcTemplate.update(query);
+                    jdbcTemplate.execute(query);
                     return RepeatStatus.FINISHED;
                 },transactionManager)
                 .build();
