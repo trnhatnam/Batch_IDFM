@@ -1,17 +1,13 @@
-DROP TABLE IF EXISTS agency;
-DROP TABLE IF EXISTS stop_times;
-DROP TABLE IF EXISTS stops;
-DROP TABLE IF EXISTS trips;
-DROP TABLE IF EXISTS routes;
 
-
-DROP TABLE IF EXISTS trips_staging;
-DROP TABLE IF EXISTS stop_times_staging;
+--DROP TABLE IF EXISTS agency;
+--DROP TABLE IF EXISTS stop_times;
+--DROP TABLE IF EXISTS stops;
+--DROP TABLE IF EXISTS trips;
+--DROP TABLE IF EXISTS routes;
 
 
 
-
-CREATE TABLE stops (
+CREATE TABLE IF NOT EXISTS  stops (
     stop_id              VARCHAR(255) PRIMARY KEY,
     stop_code            VARCHAR(255),
     stop_name            VARCHAR(255),
@@ -29,7 +25,7 @@ CREATE TABLE stops (
     stop_access          VARCHAR(255)
 );
 
-CREATE TABLE stop_times (
+CREATE TABLE IF NOT EXISTS  stop_times (
     trip_id VARCHAR(255),
     arrival_time BIGINT,
     departure_time BIGINT ,
@@ -47,7 +43,7 @@ CREATE TABLE stop_times (
     UNIQUE(trip_id, stop_sequence)
 );
 
-CREATE TABLE  trips (
+CREATE TABLE IF NOT EXISTS trips (
     route_id VARCHAR(255),
     service_id VARCHAR(255),
     trip_id VARCHAR(255) PRIMARY KEY,
@@ -60,7 +56,7 @@ CREATE TABLE  trips (
     bikes_allowed SMALLINT
 );
 
-CREATE TABLE routes (
+CREATE TABLE IF NOT EXISTS  routes (
    route_id VARCHAR(255) PRIMARY KEY,
    agency_id VARCHAR(255),
    route_short_name VARCHAR(255),
@@ -73,7 +69,7 @@ CREATE TABLE routes (
    route_sort_order VARCHAR(255)
 );
 
-CREATE TABLE agency (
+CREATE TABLE IF NOT EXISTS agency (
    agency_id VARCHAR(255) PRIMARY KEY,
    agency_name VARCHAR(255),
    agency_url TEXT,
@@ -86,7 +82,7 @@ CREATE TABLE agency (
 );
 
 -- staging tables
-CREATE TABLE  trips_staging (
+CREATE TABLE IF NOT EXISTS trips_staging (
     route_id VARCHAR(255),
     service_id VARCHAR(255),
     trip_id VARCHAR(255) PRIMARY KEY,
@@ -99,7 +95,7 @@ CREATE TABLE  trips_staging (
     bikes_allowed SMALLINT
 );
 
-CREATE TABLE stop_times_staging (
+CREATE TABLE IF NOT EXISTS stop_times_staging (
     trip_id VARCHAR(255),
     arrival_time BIGINT,
     departure_time BIGINT ,
