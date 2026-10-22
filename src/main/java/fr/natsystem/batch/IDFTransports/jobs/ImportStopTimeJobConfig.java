@@ -64,19 +64,85 @@ public class ImportStopTimeJobConfig  {
     public Step importStopTimesStep(StepProgressListener listener){
         String query = """
             WITH ranked AS (
-                SELECT sts.*,
-                ROW_NUMBER() OVER (
-                    PARTITION BY (trip_id, stop_sequence)
-                    ORDER BY arrival_time, departure_time
-                ) rn
+                SELECT
+                    sts.*,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY trip_id, stop_sequence
+                        ORDER BY arrival_time, departure_time
+                    ) AS rn
                 FROM stop_times_staging sts
             )
-            INSERT INTO stop_times 
-            SELECT trip_id,arrival_time,departure_time,start_pickup_drop_off_window,end_pickup_drop_off_window,stop_id,stop_sequence,pickup_type,drop_off_type,local_zone_id,stop_headsign,timepoint,pickup_booking_rule_id,drop_off_booking_rule_id
-            FROM ranked 
+            INSERT INTO stop_times (
+                trip_id, arrival_time, departure_time,
+                start_pickup_drop_off_window, end_pickup_drop_off_window,
+                stop_id, stop_sequence, pickup_type, drop_off_type,
+                local_zone_id, stop_headsign, timepoint,
+                pickup_booking_rule_id, drop_off_booking_rule_id
+            )
+            SELECT
+                trip_id, arrival_time, departure_time,
+                start_pickup_drop_off_window, end_pickup_drop_off_window,
+                stop_id, stop_sequence, pickup_type, drop_off_type,
+                local_zone_id, stop_headsign, timepoint,
+                pickup_booking_rule_id, drop_off_booking_rule_id
+            FROM ranked
             WHERE rn = 1
             ON CONFLICT (trip_id, stop_sequence)
-            DO NOTHING;
+            DO UPDATE
+            SET (
+                arrival_time,
+                departure_time,
+                start_pickup_drop_off_window,
+                end_pickup_drop_off_window,
+                stop_id,
+                pickup_type,
+                drop_off_type,
+                local_zone_id,
+                stop_headsign,
+                timepoint,
+                pickup_booking_rule_id,
+                drop_off_booking_rule_id
+            ) = (
+                excluded.arrival_time,
+                excluded.departure_time,
+                excluded.start_pickup_drop_off_window,
+                excluded.end_pickup_drop_off_window,
+                excluded.stop_id,
+                excluded.pickup_type,
+                excluded.drop_off_type,
+                excluded.local_zone_id,
+                excluded.stop_headsign,
+                excluded.timepoint,
+                excluded.pickup_booking_rule_id,
+                excluded.drop_off_booking_rule_id
+            )
+            WHERE (
+                stop_times.arrival_time,
+                stop_times.departure_time,
+                stop_times.start_pickup_drop_off_window,
+                stop_times.end_pickup_drop_off_window,
+                stop_times.stop_id,
+                stop_times.pickup_type,
+                stop_times.drop_off_type,
+                stop_times.local_zone_id,
+                stop_times.stop_headsign,
+                stop_times.timepoint,
+                stop_times.pickup_booking_rule_id,
+                stop_times.drop_off_booking_rule_id
+            ) IS DISTINCT FROM (
+                excluded.arrival_time,
+                excluded.departure_time,
+                excluded.start_pickup_drop_off_window,
+                excluded.end_pickup_drop_off_window,
+                excluded.stop_id,
+                excluded.pickup_type,
+                excluded.drop_off_type,
+                excluded.local_zone_id,
+                excluded.stop_headsign,
+                excluded.timepoint,
+                excluded.pickup_booking_rule_id,
+                excluded.drop_off_booking_rule_id
+            );
         """;
 
         return new StepBuilder(jobRepository)
