@@ -1,0 +1,73 @@
+package fr.natsystem.batch.IDFTransports.readers;
+
+import fr.natsystem.batch.IDFTransports.models.StopTime;
+import org.springframework.batch.infrastructure.item.file.FlatFileItemReader;
+import org.springframework.batch.infrastructure.item.file.builder.FlatFileItemReaderBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+
+import java.time.Duration;
+
+import static fr.natsystem.batch.IDFTransports.utils.ReaderUtils.getFieldValue;
+
+@Configuration
+public class ImportStopTimeReader {
+
+    private static final String STOPS_FILE = "stop_times.txt";
+    private static final int THREE = 3;
+
+    @Bean
+    public FlatFileItemReader<StopTime> stopTimesCSVReader() {
+        return new FlatFileItemReaderBuilder<StopTime>()
+                .name("importStopTimeReader")
+                .resource(new ClassPathResource(STOPS_FILE))
+                .delimited()
+                .delimiter(",")
+                .names(
+                        "trip_id",
+                        "arrival_time",
+                        "departure_time",
+                        "start_pickup_drop_off_window",
+                        "end_pickup_drop_off_window",
+                        "stop_id",
+                        "stop_sequence",
+                        "pickup_type",
+                        "drop_off_type",
+                        "local_zone_id",
+                        "stop_headsign",
+                        "timepoint",
+                        "pickup_booking_rule_id",
+                        "drop_off_booking_rule_id"
+                )
+                .fieldSetMapper(fs -> new StopTime(
+                        getFieldValue(fs,"trip_id", String::valueOf),
+                        getFieldValue(fs,"arrival_time", this::getArrivalOrDepartureTime),
+                        getFieldValue(fs,"departure_time", this::getArrivalOrDepartureTime),
+                        getFieldValue(fs,"start_pickup_drop_off_window", String::valueOf),
+                        getFieldValue(fs,"end_pickup_drop_off_window", String::valueOf),
+                        getFieldValue(fs,"stop_id", String::valueOf),
+                        getFieldValue(fs,"stop_sequence", Integer::valueOf),
+                        getFieldValue(fs,"pickup_type", Integer::valueOf),
+                        getFieldValue(fs,"drop_off_type", Integer::valueOf),
+                        getFieldValue(fs,"local_zone_id", String::valueOf),
+                        getFieldValue(fs,"stop_headsign", String::valueOf),
+                        getFieldValue(fs,"timepoint", Integer::valueOf),
+                        getFieldValue(fs,"pickup_booking_rule_id", String::valueOf),
+                        getFieldValue(fs,"drop_off_booking_rule_id", String::valueOf)
+                        ))
+                .linesToSkip(1)
+                .build();
+    }
+    
+    public Duration getArrivalOrDepartureTime(String time){
+        String[] p = time.split(":");
+        Duration d = null;
+        if (p.length == THREE) {
+            d = Duration.ofHours(Long.parseLong(p[0]))
+                    .plusMinutes(Long.parseLong(p[1]))
+                    .plusSeconds(Long.parseLong(p[2]));
+        }
+        return d;
+    }
+}
