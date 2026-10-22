@@ -7,7 +7,6 @@ import org.springframework.batch.core.job.Job;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.Step;
-import org.springframework.batch.core.step.StepExecution;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.infrastructure.item.ItemProcessor;
 import org.springframework.batch.infrastructure.item.database.JdbcBatchItemWriter;
@@ -149,9 +148,7 @@ public class ImportStopTimeJobConfig  {
 
         return new StepBuilder(jobRepository)
                 .tasklet((contribution, chunkContext) -> {
-                    long write = jdbcTemplate.update(query);
-                    StepExecution stepExecution = chunkContext.getStepContext().getStepExecution();
-                    stepExecution.setWriteCount(write);
+                    chunkContext.getStepContext().getStepExecution().setWriteCount(jdbcTemplate.update(query));
                     return RepeatStatus.FINISHED;
                 },transactionManager)
                 .listener(listener)
