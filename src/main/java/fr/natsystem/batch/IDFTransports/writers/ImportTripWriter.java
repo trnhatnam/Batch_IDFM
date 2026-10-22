@@ -15,12 +15,12 @@ public class ImportTripWriter  {
 
     private final DataSource ds;
 
-    @Bean(name="tripsStagingWriter")
-    public JdbcBatchItemWriter<Trip> stagingWriter(){
+    @Bean(name="tripsWriter")
+    public JdbcBatchItemWriter<Trip> importWriter(){
         return new JdbcBatchItemWriterBuilder<Trip>()
                 .dataSource(ds)
                 .sql("""
-                    INSERT INTO trips_staging (
+                    INSERT INTO trips (
                        route_id,
                        service_id,
                        trip_id,

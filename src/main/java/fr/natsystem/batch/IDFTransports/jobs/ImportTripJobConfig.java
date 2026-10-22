@@ -36,7 +36,7 @@ public class ImportTripJobConfig {
 
     @Bean
     public Step importTripStep(@Qualifier("tripsCSVReader") FlatFileItemReader<Trip> reader,
-                               @Qualifier("tripsStagingWriter") JdbcBatchItemWriter<Trip> writer,
+                               @Qualifier("tripsWriter") JdbcBatchItemWriter<Trip> writer,
                                @Qualifier("tripProcessor") ItemProcessor<Trip,Trip> processor,
                                StepProgressListener listener) {
         return new StepBuilder(jobRepository)
