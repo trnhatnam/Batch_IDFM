@@ -14,7 +14,7 @@ import static fr.natsystem.batch.IDFTransports.utils.ReaderUtils.getFieldValue;
 @Configuration
 public class ImportStopTimeReader {
 
-    private static final String STOPS_FILE = "stop_times_new.txt";
+    private static final String STOPS_FILE = "stop_times.txt";
     private static final int N_TIME_FIELDS = 3;
 
     @Bean
