@@ -82,19 +82,6 @@ CREATE TABLE IF NOT EXISTS agency (
 );
 
 -- staging tables
-CREATE TABLE IF NOT EXISTS trips_staging (
-    route_id VARCHAR(255),
-    service_id VARCHAR(255),
-    trip_id VARCHAR(255) PRIMARY KEY,
-    trip_headsign VARCHAR(255),
-    trip_short_name VARCHAR(255),
-    direction_id SMALLINT,
-    block_id VARCHAR(255),
-    shape_id VARCHAR(255),
-    wheelchair_accessible SMALLINT,
-    bikes_allowed SMALLINT
-);
-
 CREATE TABLE IF NOT EXISTS stop_times_staging (
     trip_id VARCHAR(255),
     arrival_time BIGINT,
