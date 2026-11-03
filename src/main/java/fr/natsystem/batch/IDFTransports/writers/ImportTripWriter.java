@@ -20,7 +20,7 @@ public class ImportTripWriter  {
         return new JdbcBatchItemWriterBuilder<Trip>()
                 .dataSource(ds)
                 .sql("""
-                    INSERT INTO trips (
+                    INSERT INTO trips_staging (
                        route_id,
                        service_id,
                        trip_id,
