@@ -156,7 +156,7 @@ public class ImportStopTimeJobConfig  {
                   AND s.stop_sequence = st.stop_sequence
             );
         """;
-        return new StepBuilder("deleteObsoleteStopTimesStep",jobRepository)
+        return new StepBuilder(jobRepository)
                 .tasklet((contribution, chunkContext) -> {
                     jdbcTemplate.update(query);
                     return RepeatStatus.FINISHED;

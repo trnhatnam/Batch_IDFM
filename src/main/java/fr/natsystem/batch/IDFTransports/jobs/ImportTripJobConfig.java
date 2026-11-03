@@ -139,7 +139,7 @@ public class ImportTripJobConfig {
                 WHERE ts.trip_id = t.trip_id
             );
         """;
-        return new StepBuilder("deleteObsoleteStopTimesStep",jobRepository)
+        return new StepBuilder(jobRepository)
                 .tasklet((contribution, chunkContext) -> {
                     jdbcTemplate.update(query);
                     return RepeatStatus.FINISHED;
