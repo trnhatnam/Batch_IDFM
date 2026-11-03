@@ -96,5 +96,6 @@ CREATE TABLE IF NOT EXISTS stop_times_staging (
     stop_headsign VARCHAR(255),
     timepoint SMALLINT,
     pickup_booking_rule_id VARCHAR(255),
-    drop_off_booking_rule_id VARCHAR(255)
+    drop_off_booking_rule_id VARCHAR(255),
+    UNIQUE(trip_id, stop_sequence)
 );

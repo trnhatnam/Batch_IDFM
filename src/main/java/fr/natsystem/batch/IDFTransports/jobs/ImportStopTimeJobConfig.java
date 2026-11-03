@@ -64,15 +64,6 @@ public class ImportStopTimeJobConfig  {
     @Bean
     public Step importStopTimesStep(StepProgressListener listener){
         String query = """
-            WITH ranked AS (
-                SELECT
-                    sts.*,
-                    ROW_NUMBER() OVER (
-                        PARTITION BY trip_id, stop_sequence
-                        ORDER BY arrival_time, departure_time
-                    ) AS rn
-                FROM stop_times_staging sts
-            )
             INSERT INTO stop_times (
                 trip_id, arrival_time, departure_time,
                 start_pickup_drop_off_window, end_pickup_drop_off_window,
@@ -86,8 +77,7 @@ public class ImportStopTimeJobConfig  {
                 stop_id, stop_sequence, pickup_type, drop_off_type,
                 local_zone_id, stop_headsign, timepoint,
                 pickup_booking_rule_id, drop_off_booking_rule_id
-            FROM ranked
-            WHERE rn = 1
+            FROM stop_times_staging
             ON CONFLICT (trip_id, stop_sequence)
             DO UPDATE
             SET (
@@ -168,14 +158,7 @@ public class ImportStopTimeJobConfig  {
         """;
         return new StepBuilder("deleteObsoleteStopTimesStep",jobRepository)
                 .tasklet((contribution, chunkContext) -> {
-                    jdbcTemplate.execute("""
-                        CREATE INDEX IF NOT EXISTS idx_stop_times_staging_key 
-                        ON stop_times_staging(trip_id, stop_sequence)
-                    """);
                     jdbcTemplate.update(query);
-                    jdbcTemplate.execute("""
-                        DROP INDEX idx_stop_times_staging_key
-                    """);
                     return RepeatStatus.FINISHED;
                 },transactionManager)
                 .build();
