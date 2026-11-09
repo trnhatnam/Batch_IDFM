@@ -22,7 +22,7 @@ public class ImportAgencyWriter {
         return new JdbcBatchItemWriterBuilder<Agency>()
                 .dataSource(ds)
                 .sql("""
-                    INSERT INTO agency (
+                    INSERT INTO agency_staging (
                         agency_id,
                         agency_name,
                         agency_url,
