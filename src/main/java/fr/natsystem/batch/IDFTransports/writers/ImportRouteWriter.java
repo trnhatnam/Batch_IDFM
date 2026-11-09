@@ -22,7 +22,7 @@ public class ImportRouteWriter {
         return new JdbcBatchItemWriterBuilder<Route>()
                 .dataSource(ds)
                 .sql("""
-                    INSERT INTO routes (
+                    INSERT INTO routes_staging (
                        route_id,
                        agency_id,
                        route_short_name,
