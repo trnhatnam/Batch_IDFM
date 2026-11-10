@@ -22,7 +22,7 @@ public class ImportStopWriter {
         return new JdbcBatchItemWriterBuilder<Stop>()
                 .dataSource(ds)
                 .sql("""
-                    INSERT INTO stops (
+                    INSERT INTO stops_staging (
                         stop_id,
                         stop_code,
                         stop_name,

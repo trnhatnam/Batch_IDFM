@@ -7,7 +7,6 @@ import org.springframework.batch.core.job.Job;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.Step;
-import org.springframework.batch.core.step.StepExecution;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.infrastructure.item.ItemProcessor;
 import org.springframework.batch.infrastructure.item.database.JdbcBatchItemWriter;
@@ -36,10 +35,12 @@ public class ImportStopTimeJobConfig  {
     @Bean
     public Job importStopTimesJob(@Qualifier("stagingStopTimesStep") Step stagingStep,
                                   @Qualifier("importStopTimesStep") Step importStep,
+                                  @Qualifier("deleteObsoleteStopTimesStep") Step deleteObsoleteStep,
                                   @Qualifier("cleanStopTimesStagingTableStep") Step cleaningStep){
         return new JobBuilder(jobRepository)
                 .start(stagingStep)
                 .next(importStep)
+                .next(deleteObsoleteStep)
                 .next(cleaningStep)
                 .build();
     }
@@ -63,15 +64,6 @@ public class ImportStopTimeJobConfig  {
     @Bean
     public Step importStopTimesStep(StepProgressListener listener){
         String query = """
-            WITH ranked AS (
-                SELECT
-                    sts.*,
-                    ROW_NUMBER() OVER (
-                        PARTITION BY trip_id, stop_sequence
-                        ORDER BY arrival_time, departure_time
-                    ) AS rn
-                FROM stop_times_staging sts
-            )
             INSERT INTO stop_times (
                 trip_id, arrival_time, departure_time,
                 start_pickup_drop_off_window, end_pickup_drop_off_window,
@@ -85,8 +77,7 @@ public class ImportStopTimeJobConfig  {
                 stop_id, stop_sequence, pickup_type, drop_off_type,
                 local_zone_id, stop_headsign, timepoint,
                 pickup_booking_rule_id, drop_off_booking_rule_id
-            FROM ranked
-            WHERE rn = 1
+            FROM stop_times_staging
             ON CONFLICT (trip_id, stop_sequence)
             DO UPDATE
             SET (
@@ -147,12 +138,29 @@ public class ImportStopTimeJobConfig  {
 
         return new StepBuilder(jobRepository)
                 .tasklet((contribution, chunkContext) -> {
-                    long write = jdbcTemplate.update(query);
-                    StepExecution stepExecution = chunkContext.getStepContext().getStepExecution();
-                    stepExecution.setWriteCount(write);
+                    chunkContext.getStepContext().getStepExecution().setWriteCount(jdbcTemplate.update(query));
                     return RepeatStatus.FINISHED;
                 },transactionManager)
                 .listener(listener)
+                .build();
+    }
+
+    @Bean
+    public Step deleteObsoleteStopTimesStep(){
+        String query = """
+            DELETE FROM stop_times st
+            WHERE NOT EXISTS (
+                SELECT 1
+                FROM stop_times_staging s
+                WHERE s.trip_id = st.trip_id
+                  AND s.stop_sequence = st.stop_sequence
+            );
+        """;
+        return new StepBuilder(jobRepository)
+                .tasklet((contribution, chunkContext) -> {
+                    jdbcTemplate.update(query);
+                    return RepeatStatus.FINISHED;
+                },transactionManager)
                 .build();
     }
 
@@ -161,7 +169,7 @@ public class ImportStopTimeJobConfig  {
         String query = "TRUNCATE stop_times_staging";
         return new StepBuilder("cleanTablesStep",jobRepository)
                 .tasklet((contribution, chunkContext) -> {
-                    jdbcTemplate.update(query);
+                    jdbcTemplate.execute(query);
                     return RepeatStatus.FINISHED;
                 },transactionManager)
                 .build();

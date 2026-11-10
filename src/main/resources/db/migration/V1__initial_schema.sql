@@ -1,13 +1,4 @@
-
---DROP TABLE IF EXISTS agency;
---DROP TABLE IF EXISTS stop_times;
---DROP TABLE IF EXISTS stops;
---DROP TABLE IF EXISTS trips;
---DROP TABLE IF EXISTS routes;
-
-
-
-CREATE TABLE IF NOT EXISTS  stops (
+CREATE TABLE  stops (
     stop_id              VARCHAR(255) PRIMARY KEY,
     stop_code            VARCHAR(255),
     stop_name            VARCHAR(255),
@@ -25,7 +16,7 @@ CREATE TABLE IF NOT EXISTS  stops (
     stop_access          VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS  stop_times (
+CREATE TABLE stop_times (
     trip_id VARCHAR(255),
     arrival_time BIGINT,
     departure_time BIGINT ,
@@ -43,7 +34,7 @@ CREATE TABLE IF NOT EXISTS  stop_times (
     UNIQUE(trip_id, stop_sequence)
 );
 
-CREATE TABLE IF NOT EXISTS trips (
+CREATE TABLE trips (
     route_id VARCHAR(255),
     service_id VARCHAR(255),
     trip_id VARCHAR(255) PRIMARY KEY,
@@ -56,7 +47,7 @@ CREATE TABLE IF NOT EXISTS trips (
     bikes_allowed SMALLINT
 );
 
-CREATE TABLE IF NOT EXISTS  routes (
+CREATE TABLE routes (
    route_id VARCHAR(255) PRIMARY KEY,
    agency_id VARCHAR(255),
    route_short_name VARCHAR(255),
@@ -69,7 +60,7 @@ CREATE TABLE IF NOT EXISTS  routes (
    route_sort_order VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS agency (
+CREATE TABLE agency (
    agency_id VARCHAR(255) PRIMARY KEY,
    agency_name VARCHAR(255),
    agency_url TEXT,
@@ -82,7 +73,7 @@ CREATE TABLE IF NOT EXISTS agency (
 );
 
 -- staging tables
-CREATE TABLE IF NOT EXISTS trips_staging (
+CREATE TABLE trips_staging (
     route_id VARCHAR(255),
     service_id VARCHAR(255),
     trip_id VARCHAR(255) PRIMARY KEY,
@@ -95,7 +86,7 @@ CREATE TABLE IF NOT EXISTS trips_staging (
     bikes_allowed SMALLINT
 );
 
-CREATE TABLE IF NOT EXISTS stop_times_staging (
+CREATE TABLE stop_times_staging (
     trip_id VARCHAR(255),
     arrival_time BIGINT,
     departure_time BIGINT ,
@@ -109,5 +100,7 @@ CREATE TABLE IF NOT EXISTS stop_times_staging (
     stop_headsign VARCHAR(255),
     timepoint SMALLINT,
     pickup_booking_rule_id VARCHAR(255),
-    drop_off_booking_rule_id VARCHAR(255)
+    drop_off_booking_rule_id VARCHAR(255),
+    UNIQUE(trip_id, stop_sequence)
 );
+

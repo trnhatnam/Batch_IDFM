@@ -20,40 +20,6 @@ public class ImportTripWriter  {
         return new JdbcBatchItemWriterBuilder<Trip>()
                 .dataSource(ds)
                 .sql("""
-                    INSERT INTO trips (
-                       route_id,
-                       service_id,
-                       trip_id,
-                       trip_headsign,
-                       trip_short_name,
-                       direction_id,
-                       block_id,
-                       shape_id,
-                       wheelchair_accessible,
-                       bikes_allowed
-                    ) VALUES (
-                        :routeId,
-                        :serviceId,
-                        :tripId,
-                        :tripHeadsign,
-                        :tripShortName,
-                        :directionId,
-                        :blockId,
-                        :shapeId,
-                        :wheelchairAccessible,
-                        :bikesAllowed
-                    );
-                """
-                )
-                .beanMapped()
-                .build();
-    }
-
-    @Bean(name="tripsStagingWriter")
-    public JdbcBatchItemWriter<Trip> stagingWriter(){
-        return new JdbcBatchItemWriterBuilder<Trip>()
-                .dataSource(ds)
-                .sql("""
                     INSERT INTO trips_staging (
                        route_id,
                        service_id,
